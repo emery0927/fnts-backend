@@ -26,8 +26,8 @@ public class Activities {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer activity_id;
-	private String activity_name;
+	private Integer id;
+	private String name;
 	private Integer activity_value_success;
 	private boolean activity_active;
 	
@@ -36,19 +36,20 @@ public class Activities {
 	private Courses course_id;
 
 	/**
-	 * @param activity_name
-	 * @param activity_value_success
-	 * @param activity_active
-	 * @param course_id
+	 * @param id
+	 * @param name
+	 * @param activityValueSuccess
+	 * @param activityActive
 	 */
-	public Activities(String activity_name, Integer activity_value_success, boolean activity_active,
-			Courses course_id) {
+	public Activities(Integer id, String name, Integer activity_value_success, boolean activity_active) {
 		super();
-		this.activity_name = activity_name;
+		this.id = id;
+		this.name = name;
 		this.activity_value_success = activity_value_success;
 		this.activity_active = activity_active;
-		this.course_id = course_id;
 	}
+
+	
 	
 	
 

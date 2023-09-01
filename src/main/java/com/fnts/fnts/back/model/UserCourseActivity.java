@@ -31,7 +31,7 @@ public class UserCourseActivity {
 	private Integer user_course_activity_id;
 	
 	@ManyToOne
-	@JoinColumn (name = "user-id")
+	@JoinColumn (name = "user_id")
 	private Users user_id;
 	
 	@ManyToOne

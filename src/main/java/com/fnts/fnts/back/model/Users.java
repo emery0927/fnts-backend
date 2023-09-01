@@ -4,13 +4,23 @@
 package com.fnts.fnts.back.model;
 
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,48 +33,102 @@ import lombok.Setter;
 @Entity
 @Getter @Setter @NoArgsConstructor
 @Table (name = "users")
-public class Users {
+public class Users implements UserDetails {
+	
+
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer user_id;
-	private String user_name;
-	private String user_lastname;
-	private String user_email;
-	private String user_password;
-	private String user_nickname;
-	private Integer user_level;
-	private Integer user_score;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	
-	@ManyToOne
-	@JoinColumn (name = "role_id")
-	private Roles role_id;
+	private String username;
+	private String lastname;
+	private String email;
+	private String password;
+	private String name;
+	private Integer level;
+	private Integer score;
+	private boolean enabled = true;
+	
+	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "user")
+    @JsonIgnore
+    private Set<UserRol> userRoles = new HashSet<>();
+	
 
 	/**
-	 * @param user_name
-	 * @param user_lastname
-	 * @param user_email
-	 * @param user_password
-	 * @param user_nickname
-	 * @param user_level
-	 * @param user_score
-	 * @param role_id
+	 * @param id
+	 * @param username
+	 * @param lastname
+	 * @param email
+	 * @param password
+	 * @param nickname
+	 * @param level
+	 * @param score
+	 * @param enabled
 	 */
-	public Users(String user_name, String user_lastname, String user_email, String user_password, String user_nickname,
-			Integer user_level, Integer user_score, Roles role_id) {
+	public Users(Long id, String username, String lastname, String email, String password, String name,
+			Integer level, Integer score, boolean enabled) {
 		super();
-		this.user_name = user_name;
-		this.user_lastname = user_lastname;
-		this.user_email = user_email;
-		this.user_password = user_password;
-		this.user_nickname = user_nickname;
-		this.user_level = user_level;
-		this.user_score = user_score;
-		this.role_id = role_id;
+		this.id = id;
+		this.username = username;
+		this.lastname = lastname;
+		this.email = email;
+		this.password = password;
+		this.name = name;
+		this.level = level;
+		this.score = score;
+		this.enabled = enabled;
 	}
 	
+	@Override
+	public String getUsername() {
+		return username;
+	}
+
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<Authority> autoridades = new HashSet<>();
+        this.userRoles.forEach(userRol -> {
+            autoridades.add(new Authority(userRol.getRol().getRol_type()));
+        });
+    	return autoridades;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 	
-	
-	
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
 
 }

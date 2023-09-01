@@ -4,11 +4,11 @@
 package com.fnts.fnts.back.model;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
-
+import javax.persistence.ManyToOne;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,23 +20,18 @@ import lombok.Setter;
  */
 @Entity
 @Getter @Setter @NoArgsConstructor
-@Table (name = "roles")
-public class Roles {
+public class UserRol {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer rol_id;
-	
-	private String rol_type;
-	/**
-	 * @param tipo_rol
-	 */
-	public Roles(Integer rol_id, String rol_type) {
-		super();
-		this.rol_id = rol_id;
-		this.rol_type = rol_type;
-	}
-	
-	
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long user_rol_id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Users user;
+
+    @ManyToOne
+    private Roles rol;
+    
+    
 
 }

@@ -24,25 +24,29 @@ public class Courses {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer course_id;
-	private String course_name;
-	private boolean course_active;
-	private String course_description;
-	private boolean course_success;
+	private Integer id;
+	private String name;
+	private boolean active;
+	private String description;
+	private boolean success;
 	
 	/**
-	 * @param course_name
-	 * @param course_active
-	 * @param course_description
-	 * @param course_success
+	 * @param id
+	 * @param name
+	 * @param active
+	 * @param description
+	 * @param success
 	 */
-	public Courses(String course_name, boolean course_active, String course_description, boolean course_success) {
+	public Courses(Integer id, String name, boolean active, String description, boolean success) {
 		super();
-		this.course_name = course_name;
-		this.course_active = course_active;
-		this.course_description = course_description;
-		this.course_success = course_success;
+		this.id = id;
+		this.name = name;
+		this.active = active;
+		this.description = description;
+		this.success = success;
 	}
+	
+	
 	
 	
 	
