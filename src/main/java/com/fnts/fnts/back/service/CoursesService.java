@@ -48,7 +48,7 @@ public class CoursesService {
 				userCourseActivity.setUser(userCourse.get(i).getUser());
 				userCourseActivity.setUser_course_activity_id(userCourse.get(i).getUser_course_activity_id());
 				userCourseActivity.setCourse_date_init(userCourse.get(i).getCourse_date_init());
-				userCourseActivity.setCourse(courses.get(0));
+				userCourseActivity.setCourse(courses.get(1));
 				userCourseActivityRepository.save(userCourseActivity);
 				
 			}
