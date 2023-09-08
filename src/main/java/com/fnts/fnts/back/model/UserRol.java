@@ -23,7 +23,7 @@ import lombok.Setter;
 public class UserRol {
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long user_rol_id;
 
     @ManyToOne(fetch = FetchType.EAGER)

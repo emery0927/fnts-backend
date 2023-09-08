@@ -6,10 +6,10 @@ package com.fnts.fnts.back.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -27,16 +27,14 @@ import lombok.Setter;
 public class UserCourseActivity {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer user_course_activity_id;
 	
-	@ManyToOne
-	@JoinColumn (name = "user_id")
-	private Users user_id;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Users user;
 	
-	@ManyToOne
-	@JoinColumn (name = "course_id")
-	private Courses course_id;
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Courses course;
 	
 	private Date course_date_init;
 
@@ -47,8 +45,8 @@ public class UserCourseActivity {
 	 */
 	public UserCourseActivity(Users user_id, Courses course_id, Date course_date_init) {
 		super();
-		this.user_id = user_id;
-		this.course_id = course_id;
+		this.user = user_id;
+		this.course = course_id;
 		this.course_date_init = course_date_init;
 	}
 	

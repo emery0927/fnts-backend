@@ -18,6 +18,7 @@ import com.fnts.fnts.back.model.JwtRequest;
 import com.fnts.fnts.back.model.JwtResponse;
 import com.fnts.fnts.back.model.Users;
 import com.fnts.fnts.back.service.UsersDetailService;
+import com.fnts.fnts.back.service.UsersService;
 
 import java.security.Principal;
 
@@ -34,20 +35,24 @@ public class AuthenticationRest {
 
 	    @Autowired
 	    private UsersDetailService userDetailsService;
+	    
+	    @Autowired
+	    private UsersService userService;
 
 	    @Autowired
 	    private JwtUtils jwtUtils;
 
 	    @PostMapping("/generate-token")
 	    public ResponseEntity<?> generarToken(@RequestBody JwtRequest jwtRequest) throws Exception {
-	        try{
-	            autenticar(jwtRequest.getUsername(),jwtRequest.getPassword());
+	    	Users users = this.userService.obtenerUsuarioPorEmail(jwtRequest.getEmail());
+	    	try{
+	            autenticar(users.getUsername(),jwtRequest.getPassword());
 	        }catch (Exception exception){
 	            exception.printStackTrace();
 	            throw new Exception("Usuario no encontrado");
 	        }
 
-	        UserDetails userDetails =  this.userDetailsService.loadUserByUsername(jwtRequest.getUsername());
+	        UserDetails userDetails =  this.userDetailsService.loadUserByUsername(users.getUsername());
 	        String token = this.jwtUtils.generateToken(userDetails);
 	        return ResponseEntity.ok(new JwtResponse(token));
 	    }

@@ -48,11 +48,16 @@ public class Users implements UserDetails {
 	private String name;
 	private Integer level;
 	private Integer score;
+	private String perfil;
 	private boolean enabled = true;
 	
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "user")
     @JsonIgnore
     private Set<UserRol> userRoles = new HashSet<>();
+	
+	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "user")
+    @JsonIgnore
+    private Set<UserCourseActivity> userCourseActivity = new HashSet<>();
 	
 
 	/**
@@ -67,7 +72,7 @@ public class Users implements UserDetails {
 	 * @param enabled
 	 */
 	public Users(Long id, String username, String lastname, String email, String password, String name,
-			Integer level, Integer score, boolean enabled) {
+			Integer level, Integer score, boolean enabled, String perfil) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -78,6 +83,7 @@ public class Users implements UserDetails {
 		this.level = level;
 		this.score = score;
 		this.enabled = enabled;
+		this.perfil = perfil;
 	}
 	
 	@Override
