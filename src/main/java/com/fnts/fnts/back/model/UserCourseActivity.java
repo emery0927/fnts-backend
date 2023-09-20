@@ -36,6 +36,13 @@ public class UserCourseActivity {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Courses course;
 	
+	@ManyToOne(fetch = FetchType.EAGER)
+	private Activities activity;
+	
+	private boolean course_success;
+	
+	private boolean activity_success;
+	
 	private Date course_date_init;
 
 	/**
@@ -43,11 +50,14 @@ public class UserCourseActivity {
 	 * @param course_id
 	 * @param course_date_init
 	 */
-	public UserCourseActivity(Users user_id, Courses course_id, Date course_date_init) {
+	public UserCourseActivity(Users user_id, Courses course_id, Activities activity, Date course_date_init, boolean course_success, boolean activity_success) {
 		super();
 		this.user = user_id;
 		this.course = course_id;
+		this.activity = activity;
 		this.course_date_init = course_date_init;
+		this.course_success = course_success;
+		this.activity_success = activity_success;
 	}
 	
 	

@@ -25,15 +25,15 @@ import lombok.Setter;
 public class Activities {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	private String name;
-	private Integer activity_value_success;
+	
 	private boolean activity_active;
 	
 	@ManyToOne
 	@JoinColumn (name = "course_id")
-	private Courses course_id;
+	private Courses course;
 
 	/**
 	 * @param id
@@ -41,13 +41,13 @@ public class Activities {
 	 * @param activityValueSuccess
 	 * @param activityActive
 	 */
-	public Activities(Integer id, String name, Integer activity_value_success, boolean activity_active) {
+	public Activities(Long id, String name, boolean activity_active) {
 		super();
 		this.id = id;
 		this.name = name;
-		this.activity_value_success = activity_value_success;
 		this.activity_active = activity_active;
 	}
+	
 
 	
 	

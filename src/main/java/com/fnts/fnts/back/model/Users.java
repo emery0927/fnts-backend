@@ -48,7 +48,7 @@ public class Users implements UserDetails {
 	private String name;
 	private Integer level;
 	private Integer score;
-	private String perfil;
+	private String urlPicProfile;
 	private boolean enabled = true;
 	
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "user")
@@ -83,7 +83,7 @@ public class Users implements UserDetails {
 		this.level = level;
 		this.score = score;
 		this.enabled = enabled;
-		this.perfil = perfil;
+		this.urlPicProfile = perfil;
 	}
 	
 	@Override

@@ -61,5 +61,19 @@ public class UsersService implements IUserService {
 		return usersRepository.findByEmail(email);
 	}
 	
+	public void sumarPuntos(Users user) {
+		user.setScore(user.getScore()+10);
+		
+		usersRepository.save(user);
+		
+	}
+	
+	public void aumentarLevel(Users user) {
+		user.setLevel(user.getLevel()+1);
+		
+		usersRepository.save(user);
+		
+	}
+	
 
 }
