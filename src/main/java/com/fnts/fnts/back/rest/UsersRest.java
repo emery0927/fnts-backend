@@ -56,7 +56,7 @@ public class UsersRest {
         Set<UserRol> usuarioRoles = new HashSet<>();
         Set<UserCourseActivity> usuarioCurso = new HashSet<>();
         
-        List<Courses> courses = courseService.getAllCourses();
+        List<Courses> courses = courseService.getCourses();
         List<Activities> activities = activitiesService.getAllActivities();
         
         user.setPassword(this.bCryptPasswordEncoder.encode(user.getPassword()));

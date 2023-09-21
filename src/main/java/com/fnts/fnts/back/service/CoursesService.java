@@ -17,6 +17,7 @@ import com.fnts.fnts.back.model.Activities;
 import com.fnts.fnts.back.model.ActivityContent;
 import com.fnts.fnts.back.model.CourseActivity;
 import com.fnts.fnts.back.model.Courses;
+import com.fnts.fnts.back.model.CoursesDTO;
 import com.fnts.fnts.back.model.UserCourseActivity;
 import com.fnts.fnts.back.model.Users;
 import com.fnts.fnts.back.repository.ActivitiesRepository;
@@ -43,7 +44,11 @@ public class CoursesService {
 	/*
 	 * Encaragdo de realizar la consulta de todos los cursos.
 	 */
-	public List<Courses> getAllCourses() {
+	public List<CoursesDTO> getAllCourses() {
+		return coursesRepository.findAllCourses();
+	}
+	
+	public List<Courses> getCourses() {
 		return coursesRepository.findAll();
 	}
 	
@@ -54,7 +59,7 @@ public class CoursesService {
 		List<UserCourseActivity> userCourse = userCourseActivityRepository.findAll();
 		
 		for (int i = 0; i < userCourse.size(); i++) {
-			List<Courses> courses = getAllCourses();
+			List<Courses> courses = getCourses();
 			if (!(i==courses.size())) {
 				Integer f = i;
 				f++;

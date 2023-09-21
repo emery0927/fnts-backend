@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fnts.fnts.back.model.ActivityContent;
 import com.fnts.fnts.back.model.CourseActivity;
 import com.fnts.fnts.back.model.Courses;
+import com.fnts.fnts.back.model.CoursesDTO;
 import com.fnts.fnts.back.model.Users;
 import com.fnts.fnts.back.service.CoursesService;
 import com.fnts.fnts.back.service.UsersService;
@@ -42,11 +43,11 @@ public class CoursesRest {
 	@Autowired
 	private UsersService usersService;
 	
-//	@GetMapping("/")
-//    public List<Courses> getCourses(){
-//        return coursesService.getAllCourses();
-//	}
-//	
+	@GetMapping("/get/")
+    public List<CoursesDTO> getCourses(){
+        return coursesService.getAllCourses();
+	}
+	
 	@PutMapping("/actualiza-curso-usuario/"+"{email}")
 	public void updateUserCourse(@PathVariable("email") String email) throws Exception {
 		Users user = usersService.obtenerUsuarioPorEmail(email);
