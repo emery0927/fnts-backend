@@ -19,6 +19,7 @@ import com.fnts.fnts.back.model.CourseActivity;
 import com.fnts.fnts.back.model.Courses;
 import com.fnts.fnts.back.model.CoursesDTO;
 import com.fnts.fnts.back.model.UserCourseActivity;
+import com.fnts.fnts.back.model.UserCourseActivityDTO;
 import com.fnts.fnts.back.model.Users;
 import com.fnts.fnts.back.repository.ActivitiesRepository;
 import com.fnts.fnts.back.repository.CoursesRepository;
@@ -52,17 +53,32 @@ public class CoursesService {
 		return coursesRepository.findAll();
 	}
 	
+	public List<UserCourseActivityDTO> getUserCourse() {
+
+		List<UserCourseActivity> userCourse = userCourseActivityRepository.findAll();
+		
+		List<UserCourseActivityDTO> userDto = new ArrayList<>();
+
+		for (int i = 0; i < userCourse.size(); i++) {
+			UserCourseActivityDTO uca = new UserCourseActivityDTO();
+			uca.setActivity_id(userCourse.get(i).getActivity().getId());
+			uca.setCourse_id(userCourse.get(i).getCourse().getId());
+			
+			userDto.add(uca);
+		}
+		return userDto;
+	}
+	
 	/*
 	 * Encaragdo de realizar la actualización de la relación del curso con el usuario.
 	 */
 	public void updateCourseSuccess(Users user) {
 		List<UserCourseActivity> userCourse = userCourseActivityRepository.findAll();
-		
+		//Fixed
 		for (int i = 0; i < userCourse.size(); i++) {
 			List<Courses> courses = getCourses();
 			if (!(i==courses.size())) {
-				Integer f = i;
-				f++;
+				Integer f = userCourse.get(i).getCourse().getId();
 				if (userCourse.get(i).getUser().getId() == user.getId() && userCourse.get(i).isCourse_success()) {
 					List<Activities> activities = activitiesRepository.findByCourseId(courses.get(f).getId());
 					UserCourseActivity userCourseActivity = userCourse.get(i);
