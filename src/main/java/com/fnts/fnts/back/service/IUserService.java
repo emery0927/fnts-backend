@@ -5,6 +5,7 @@ package com.fnts.fnts.back.service;
 
 import java.util.Set;
 
+import com.fnts.fnts.back.model.UpdateUserDTO;
 import com.fnts.fnts.back.model.UserCourseActivity;
 import com.fnts.fnts.back.model.UserRol;
 import com.fnts.fnts.back.model.Users;
@@ -22,4 +23,8 @@ public interface IUserService {
     public void eliminarUsuario(Long id);
     
     public Users obtenerUsuarioPorEmail(String email);
+    
+    public void actualizarDatosUsuario(Users userActual, UpdateUserDTO userUpdate);
+    
+    public void actualizarPasswordUsuario(Users userActual, Users userUpdate);
 }
