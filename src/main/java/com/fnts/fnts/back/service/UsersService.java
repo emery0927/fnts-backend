@@ -6,8 +6,10 @@ package com.fnts.fnts.back.service;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.fnts.fnts.back.model.UpdateUserDTO;
 import com.fnts.fnts.back.model.UserCourseActivity;
 import com.fnts.fnts.back.model.UserRol;
 import com.fnts.fnts.back.model.Users;
@@ -26,6 +28,9 @@ public class UsersService implements IUserService {
 	
 	@Autowired
 	private RolesRepository rolRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	
 	@Override
@@ -50,6 +55,27 @@ public class UsersService implements IUserService {
     public Users obtenerUsuario(String username) {
         return usersRepository.findByUsername(username);
     }
+	
+	@Override
+	public void actualizarDatosUsuario(Users userActual, UpdateUserDTO userUpdate) {
+		Users userUp = userActual;
+		
+		userUp.setEmail(userUpdate.getEmailNuevo());
+		userUp.setUsername(userUpdate.getUsername());
+		
+		usersRepository.save(userUp);
+		
+	}
+	
+	@Override
+	public void actualizarPasswordUsuario(Users userActual, Users userUpdate) {
+		Users userUp = userActual;
+		
+		userUp.setPassword(this.bCryptPasswordEncoder.encode(userUpdate.getPassword()));
+		
+		usersRepository.save(userUp);
+		
+	}
 
     @Override
     public void eliminarUsuario(Long id) {
@@ -73,7 +99,6 @@ public class UsersService implements IUserService {
 		
 		usersRepository.save(user);
 		
-	}
-	
+	}	
 
 }

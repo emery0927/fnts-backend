@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fnts.fnts.back.model.Activities;
 import com.fnts.fnts.back.model.Courses;
 import com.fnts.fnts.back.model.Roles;
+import com.fnts.fnts.back.model.UpdateUserDTO;
 import com.fnts.fnts.back.model.UserCourseActivity;
 import com.fnts.fnts.back.model.UserRol;
 import com.fnts.fnts.back.model.Users;
@@ -87,6 +88,18 @@ public class UsersRest {
     @GetMapping("/{username}")
     public Users getUser(@PathVariable("username") String username){
         return usersService.obtenerUsuario(username);
+    }
+    
+    @PutMapping("/modificar-datos")
+    public void modificarDatos(@RequestBody UpdateUserDTO user) {
+    	Users userd = usersService.obtenerUsuarioPorEmail(user.getEmailActual());
+    	usersService.actualizarDatosUsuario(userd, user);
+    }
+    
+    @PutMapping("/modificar-password")
+    public void modificarPassword(@RequestBody Users user) {
+    	Users userd = usersService.obtenerUsuarioPorEmail(user.getEmail());
+    	usersService.actualizarPasswordUsuario(userd, user);
     }
 
     @DeleteMapping("/{id}")
