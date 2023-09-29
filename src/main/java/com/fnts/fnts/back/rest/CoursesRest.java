@@ -23,6 +23,7 @@ import com.fnts.fnts.back.model.ActivityContent;
 import com.fnts.fnts.back.model.CourseActivity;
 import com.fnts.fnts.back.model.Courses;
 import com.fnts.fnts.back.model.CoursesDTO;
+import com.fnts.fnts.back.model.UserCourseActivityDTO;
 import com.fnts.fnts.back.model.Users;
 import com.fnts.fnts.back.service.CoursesService;
 import com.fnts.fnts.back.service.UsersService;
@@ -46,6 +47,12 @@ public class CoursesRest {
 	@GetMapping("/get/")
     public List<CoursesDTO> getCourses(){
         return coursesService.getAllCourses();
+	}
+	
+	@GetMapping("/get-courses-activities/"+"{email}")
+	public List<UserCourseActivityDTO> getUserCourseActivity(@PathVariable("email") String email) {
+		Users user = usersService.obtenerUsuarioPorEmail(email);
+		return coursesService.getUserCourse(user);
 	}
 	
 	@PutMapping("/actualiza-curso-usuario/"+"{email}")

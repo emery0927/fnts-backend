@@ -64,8 +64,9 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .authorizeRequests()
                 .antMatchers("/generate-token","/users/","/courses/", "/activities/", "/activities/save",
-                		"/courses/save", "/courses/actualizar-estado-actividad/", "/courses/actualizar-actividad/",
-                		"/courses/get/").permitAll()
+                		"/courses/save", "/courses/actualizar-estado-actividad/**", "/courses/actualizar-actividad/**",
+                		"/courses/get/", "/courses/get-courses-activities/**", "/courses/actualizar-curso/**", 
+                		"/users/sumar-puntos/**", "/users/aumentar-level/**").permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated()
                 .and()

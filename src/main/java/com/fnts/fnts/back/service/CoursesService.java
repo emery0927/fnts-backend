@@ -24,6 +24,7 @@ import com.fnts.fnts.back.model.Users;
 import com.fnts.fnts.back.repository.ActivitiesRepository;
 import com.fnts.fnts.back.repository.CoursesRepository;
 import com.fnts.fnts.back.repository.UserCourseActivityRepository;
+import com.fnts.fnts.back.repository.UsersRepository;
 
 /**
  * @author Emery Estupiñan
@@ -31,58 +32,65 @@ import com.fnts.fnts.back.repository.UserCourseActivityRepository;
  */
 @Service
 public class CoursesService {
-	
+
 	@Autowired
 	private CoursesRepository coursesRepository;
-	
+
 	@Autowired
 	private UserCourseActivityRepository userCourseActivityRepository;
-	
+
 	@Autowired
 	private ActivitiesRepository activitiesRepository;
 
-	
+	@Autowired
+	private UsersRepository usersRepository;
+
 	/*
 	 * Encaragdo de realizar la consulta de todos los cursos.
 	 */
 	public List<CoursesDTO> getAllCourses() {
 		return coursesRepository.findAllCourses();
 	}
-	
+
 	public List<Courses> getCourses() {
 		return coursesRepository.findAll();
 	}
-	
-	public List<UserCourseActivityDTO> getUserCourse() {
+
+	public List<UserCourseActivityDTO> getUserCourse(Users user) {
 
 		List<UserCourseActivity> userCourse = userCourseActivityRepository.findAll();
-		
+
 		List<UserCourseActivityDTO> userDto = new ArrayList<>();
 
 		for (int i = 0; i < userCourse.size(); i++) {
-			UserCourseActivityDTO uca = new UserCourseActivityDTO();
-			uca.setActivity_id(userCourse.get(i).getActivity().getId());
-			uca.setCourse_id(userCourse.get(i).getCourse().getId());
-			
-			userDto.add(uca);
+			if (userCourse.get(i).getUser().getId() == user.getId()) {
+				UserCourseActivityDTO uca = new UserCourseActivityDTO();
+				uca.setActivity_id(userCourse.get(i).getActivity().getId());
+				uca.setCourse_id(userCourse.get(i).getCourse().getId());
+				uca.setCourse_state(userCourse.get(i).isCourse_success());
+				userDto.add(uca);
+			}
+
 		}
+
 		return userDto;
 	}
-	
+
 	/*
-	 * Encaragdo de realizar la actualización de la relación del curso con el usuario.
+	 * Encaragdo de realizar la actualización de la relación del curso con el
+	 * usuario.
 	 */
 	public void updateCourseSuccess(Users user) {
 		List<UserCourseActivity> userCourse = userCourseActivityRepository.findAll();
-		//Fixed
+		// Fixed
 		for (int i = 0; i < userCourse.size(); i++) {
 			List<Courses> courses = getCourses();
-			if (!(i==courses.size())) {
+			if (!(i == courses.size())) {
 				Integer f = userCourse.get(i).getCourse().getId();
 				if (userCourse.get(i).getUser().getId() == user.getId() && userCourse.get(i).isCourse_success()) {
 					List<Activities> activities = activitiesRepository.findByCourseId(courses.get(f).getId());
 					UserCourseActivity userCourseActivity = userCourse.get(i);
-					
+
 					userCourseActivity.setUser(userCourse.get(i).getUser());
 					userCourseActivity.setUser_course_activity_id(userCourse.get(i).getUser_course_activity_id());
 					userCourseActivity.setCourse_date_init(userCourse.get(i).getCourse_date_init());
@@ -92,73 +100,72 @@ public class CoursesService {
 					userCourseActivity.setCourse_success(false);
 					userCourseActivityRepository.save(userCourseActivity);
 					break;
-				
+
 				}
 			}
-		}		
+		}
 
 	}
-	
+
 	/*
-	 * Encaragdo de realizar la actualización de la relación del curso con el usuario.
+	 * Encaragdo de realizar la actualización de la relación del curso con el
+	 * usuario.
 	 */
 	public void updateActivitySuccess(Users user) {
 		List<UserCourseActivity> userCourse = userCourseActivityRepository.findAll();
-		
+
 		for (int i = 0; i < userCourse.size(); i++) {
 			if (userCourse.get(i).getUser().getId() == user.getId() && userCourse.get(i).isActivity_success()) {
 				UserCourseActivity userCourseActivity = userCourse.get(i);
-				List<Activities> activities = activitiesRepository.findByCourseId(userCourse.get(i).getCourse().getId());
+				List<Activities> activities = activitiesRepository
+						.findByCourseId(userCourse.get(i).getCourse().getId());
 				for (int j = 0; j < activities.size(); j++) {
-					if (userCourse.get(i).getActivity().getId()==activities.get(j).getId()) {
-						if (j==(activities.size()-1)) {
+					if (userCourse.get(i).getActivity().getId() == activities.get(j).getId()) {
+						if (j == (activities.size() - 1)) {
 							courseSuccessChangeState(user);
 						} else {
-							userCourseActivity.setActivity(activities.get(j+1));
+							userCourseActivity.setActivity(activities.get(j + 1));
 							userCourseActivity.setActivity_success(false);
 							userCourseActivityRepository.save(userCourseActivity);
 							break;
 						}
 					}
 				}
-				
-			
+
 			}
-		}		
+		}
 
 	}
-	
+
 //	public List<Courses> consultarCursosConActividades() {
 //        return coursesRepository.findAllCursosWithActividades();
 //    }
 //	
-	public void saveCourse(Courses course) throws JsonProcessingException, JsonMappingException  {
+	public void saveCourse(Courses course) throws JsonProcessingException, JsonMappingException {
 
 		List<ActivityContent> listaActividades = new ArrayList<>();
 
 		List<CourseActivity> listaCursosActividades = new ArrayList<>();
 
-		
-		
 		try {
 			coursesRepository.save(course);
-			
+
 			ObjectMapper objectMapper = new ObjectMapper();
 			listaActividades = objectMapper.readValue(course.getActivity_json(),
 					new TypeReference<List<ActivityContent>>() {
 					});
 			for (int i = 0; i < listaActividades.size(); i++) {
 				Activities activity = new Activities();
-				if (i==0) {
+				if (i == 0) {
 					activity.setActivity_active(true);
 				} else {
 					activity.setActivity_active(false);
 				}
 				activity.setCourse(course);
 				activity.setName(listaActividades.get(i).getNombreActividad());
-				
+
 				activitiesRepository.save(activity);
-				
+
 			}
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
@@ -168,21 +175,22 @@ public class CoursesService {
 			e.printStackTrace();
 		}
 
-		
 	}
-	
+
 	public ArrayList<CourseActivity> obtenerContenidoActividad() throws JsonProcessingException {
 
 		try {
 			List<Courses> course = coursesRepository.findAll();
 			ArrayList<ActivityContent> listaActividades = new ArrayList<>();
-			
+
 			ArrayList<CourseActivity> listaCursosActividades = new ArrayList<>();
-			
+
 			for (int i = 0; i < course.size(); i++) {
 				ObjectMapper objectMapper = new ObjectMapper();
-				listaActividades = objectMapper.readValue(course.get(i).getActivity_json(), new TypeReference<ArrayList<ActivityContent>>() {});
-				
+				listaActividades = objectMapper.readValue(course.get(i).getActivity_json(),
+						new TypeReference<ArrayList<ActivityContent>>() {
+						});
+
 				CourseActivity cA = new CourseActivity();
 				cA.setActivities(listaActividades);
 				listaCursosActividades.add(cA);
@@ -196,32 +204,32 @@ public class CoursesService {
 		}
 
 	}
-	
+
 	public void activitySuccessChangeState(Users user) {
 		List<UserCourseActivity> userCourse = userCourseActivityRepository.findAll();
-		
+
 		for (int i = 0; i < userCourse.size(); i++) {
 			if (userCourse.get(i).getUser().getId() == user.getId()) {
 				UserCourseActivity userCourseActivity = userCourse.get(i);
 				userCourseActivity.setActivity_success(true);
 				userCourseActivityRepository.save(userCourseActivity);
-			
+
 			}
 		}
 	}
-	
+
 	public void courseSuccessChangeState(Users user) {
 		List<UserCourseActivity> userCourse = userCourseActivityRepository.findAll();
-		
+
 		for (int i = 0; i < userCourse.size(); i++) {
 			if (userCourse.get(i).getUser().getId() == user.getId()) {
 				UserCourseActivity userCourseActivity = userCourse.get(i);
 				userCourseActivity.setCourse_success(true);
 				userCourseActivityRepository.save(userCourseActivity);
-			
+
 			}
 		}
-		
+
 	}
 
 }

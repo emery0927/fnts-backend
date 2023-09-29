@@ -26,6 +26,7 @@ import lombok.ToString;
 @Getter @Setter @NoArgsConstructor @ToString
 public class ActivityContent {
 	
+	private Integer idActInJson;
 	private String nombreActividad;
 	private Integer numeroDiapositivas;
 	private ArrayList<Slides> diapositivas;
