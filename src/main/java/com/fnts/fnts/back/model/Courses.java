@@ -5,6 +5,7 @@ package com.fnts.fnts.back.model;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,7 +31,9 @@ public class Courses {
 	private Integer id;
 	private String name;
 	private boolean active;
+	@Column(length= 100000)
 	private String description;
+	@Column(length= 100000)
 	private String activity_json;
 	
 	@OneToMany(mappedBy = "course")
